@@ -1,4 +1,4 @@
-package br.com.ajudafio.theme
+package br.com.ajudafio.core.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

@@ -1,4 +1,4 @@
-package br.com.ajudafio.ui.greeting
+package br.com.ajudafio.presentation.greeting
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -23,9 +23,7 @@ import ajudafio_cmp.sharedui.generated.resources.Res
 import ajudafio_cmp.sharedui.generated.resources.compose_multiplatform
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.unit.dp
-import br.com.ajudafio.theme.AppPallet
 
 /**
  * Tela de exemplo ligando presentation -> domain (usecase) -> data (repository).
