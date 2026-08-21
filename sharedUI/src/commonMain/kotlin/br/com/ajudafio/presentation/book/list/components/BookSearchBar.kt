@@ -26,6 +26,8 @@ import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import br.com.ajudafio.core.theme.AppPallet
@@ -81,18 +83,19 @@ fun BookSearchBar(
             trailingIcon = {
                 AnimatedVisibility(
                     visible = searchQuery.isNotBlank(),
-                    enter = fadeIn(animationSpec = tween (durationMillis = 500)),
-                    exit = fadeOut(animationSpec = tween (durationMillis = 500))
+                    enter = fadeIn(animationSpec = tween(durationMillis = 500)),
+                    exit = fadeOut(animationSpec = tween(durationMillis = 500))
                 ) {
                     IconButton(
                         onClick = {
                             onSearchQueryChange("")
-                        }
+                        },
+                        modifier = Modifier.pointerHoverIcon(PointerIcon.Hand)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = stringResource(Res.string.close_hint),
-                            tint = MaterialTheme.colorScheme.onSurface
+                            tint = MaterialTheme.colorScheme.onSurface,
                         )
                     }
                 }

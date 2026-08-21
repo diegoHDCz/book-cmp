@@ -1,25 +1,50 @@
 package br.com.ajudafio.presentation.book.list
 
+import ajudafio_cmp.sharedui.generated.resources.Res
+import ajudafio_cmp.sharedui.generated.resources.favorites
+import ajudafio_cmp.sharedui.generated.resources.no_favorite_books
+import ajudafio_cmp.sharedui.generated.resources.no_search_results
+import ajudafio_cmp.sharedui.generated.resources.search_results
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import br.com.ajudafio.core.theme.AppPallet
 import br.com.ajudafio.feature.book.domain.model.Book
+import br.com.ajudafio.presentation.book.list.components.BookList
 import br.com.ajudafio.presentation.book.list.components.BookSearchBar
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -44,6 +69,17 @@ fun BookListScreen(
 }
 
 @Composable
+fun BookListScreen(
+    state: BookListState,
+    onAction: (BookListAction) -> Unit = {},
+) {
+    BookListContent(
+        state = state,
+        onAction = onAction,
+    )
+}
+
+@Composable
 private fun BookListContent(
     state: BookListState,
     onAction: (BookListAction) -> Unit,
@@ -51,11 +87,17 @@ private fun BookListContent(
     ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
+    val pagerState = rememberPagerState { 2 }
+    val searchResultsLazyState = rememberLazyListState()
+    val favoriteBooksListState = rememberLazyListState()
+
+    LaunchedEffect(state.searchResults) {
+        searchResultsLazyState.animateScrollToItem(0)
+    }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding().padding(top = 40.dp),
+        modifier = Modifier.fillMaxSize().background(AppPallet.PrimaryColorLight)
+            .statusBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         BookSearchBar(
@@ -69,56 +111,140 @@ private fun BookListContent(
             modifier = Modifier
                 .widthIn(max = 400.dp)
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(vertical = 36.dp, horizontal = 16.dp)
         )
-//            Row(verticalAlignment = Alignment.CenterVertically) {
-//                OutlinedTextField(
-//                    value = state.query,
-//                    onValueChange = { onAction(BookListAction.OnQueryChange(it)) },
-//                    label = { Text("Buscar livros") },
-//                    singleLine = true,
-//                    modifier = Modifier.weight(1f),
-//                )
-//                Spacer(Modifier.width(8.dp))
-//                Button(onClick = { onAction(BookListAction.OnSearchClick) }) {
-//                    Text("Buscar")
-//                }
-//            }
-//
-//            Spacer(Modifier.height(16.dp))
-//
-//            when {
-//                state.isLoading -> Box(
-//                    modifier = Modifier.fillMaxSize(),
-//                    contentAlignment = Alignment.Center,
-//                ) {
-//                    CircularProgressIndicator()
-//                }
-//
-//                state.errorMessage != null -> Box(
-//                    modifier = Modifier.fillMaxSize(),
-//                    contentAlignment = Alignment.Center,
-//                ) {
-//                    Text(
-//                        text = state.errorMessage.asString(),
-//                        color = MaterialTheme.colorScheme.error,
-//                    )
-//                }
-//
-//                else -> LazyColumn(
-//                    verticalArrangement = Arrangement.spacedBy(8.dp),
-//                    modifier = Modifier.fillMaxSize(),
-//                ) {
-//                    items(items = state.books, key = { it.id }) { book ->
-//                        BookListItem(
-//                            book = book,
-//                            onClick = { onAction(BookListAction.OnBookClick(book.id)) },
-//                        )
-//                    }
-//                }
-//            }
-    }
+        Surface(
+            modifier = Modifier.weight(1f)
+                .fillMaxWidth(),
+            color = AppPallet.BackgroundColor,
+            shape = RoundedCornerShape(
+                topStart = 32.dp,
+                topEnd = 32.dp
+            )
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize().navigationBarsPadding(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                PrimaryTabRow(
+                    selectedTabIndex = state.selectedTabIndex,
 
+                    containerColor = AppPallet.BackgroundColor,
+
+                    contentColor = AppPallet.TextColor,
+                    modifier = Modifier
+                        .widthIn(max = 700.dp)
+                        .fillMaxWidth().navigationBarsPadding(),
+
+                    indicator = {
+                        TabRowDefaults.SecondaryIndicator(
+                            color = AppPallet.SecondaryColorDark,
+                            height = 3.dp,
+                            modifier = Modifier.tabIndicatorOffset(
+                                selectedTabIndex = state.selectedTabIndex,
+                                matchContentSize = false
+                            ).fillMaxWidth()
+                        )
+                    }
+                ) {
+                    Tab(
+                        selected = state.selectedTabIndex == 0,
+                        onClick = {
+                            onAction(BookListAction.onTabSelected(0))
+                        },
+                        selectedContentColor = AppPallet.TextColor,
+                        unselectedContentColor = AppPallet.TextColor.copy(alpha = 0.66f)
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.search_results),
+                            modifier = Modifier.padding(vertical = 12.dp)
+                        )
+                    }
+                    Tab(
+                        selected = state.selectedTabIndex == 1,
+                        onClick = {
+                            onAction(BookListAction.onTabSelected(1))
+                        },
+                        selectedContentColor = AppPallet.TextColor,
+                        unselectedContentColor = AppPallet.TextColor.copy(alpha = 0.66f)
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.favorites),
+                            modifier = Modifier.padding(vertical = 12.dp)
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxSize().weight(1f)
+                ) { pageIndex ->
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        when (pageIndex) {
+                            0 -> {
+                                if (state.isLoading) {
+                                    CircularProgressIndicator()
+                                } else {
+                                    when {
+                                        state.errorMessage != null -> {
+                                            Text(
+                                                text = state.errorMessage.asString(),
+                                                textAlign = TextAlign.Center,
+                                                style = MaterialTheme.typography.headlineSmall,
+                                                color = MaterialTheme.colorScheme.error
+                                            )
+                                        }
+
+                                        state.searchResults.isEmpty() -> {
+                                            Text(
+                                                text = stringResource(Res.string.no_search_results),
+                                                textAlign = TextAlign.Center,
+                                                style = MaterialTheme.typography.headlineSmall,
+                                                color = MaterialTheme.colorScheme.error
+                                            )
+                                        }
+
+                                        else -> {
+                                            BookList(
+                                                books = state.searchResults,
+                                                onBookClick = {
+                                                    onAction(BookListAction.OnBookClick(it))
+                                                },
+                                                modifier = Modifier.fillMaxSize(),
+                                                scrollState = searchResultsLazyState
+                                            )
+                                        }
+                                    }
+
+                                }
+
+                            }
+
+                            1 -> {
+                                if(state.searchResults.isEmpty()) {
+                                    Text(
+                                        text = stringResource(Res.string.no_favorite_books),
+                                        textAlign = TextAlign.Center,
+                                        style = MaterialTheme.typography.headlineSmall,
+                                        color = MaterialTheme.colorScheme.error
+                                    )
+                                }else{
+                                    BookList(
+                                        books = state.favoriteBooks,
+                                        onBookClick = {
+                                            onAction(BookListAction.OnBookClick(it))
+                                        },
+                                        modifier = Modifier.fillMaxSize(),
+                                        scrollState = favoriteBooksListState
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 

@@ -5,16 +5,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import br.com.ajudafio.core.theme.AppTheme
 import br.com.ajudafio.presentation.book.list.BookListScreen
-import br.com.ajudafio.presentation.book.list.BookListViewModel
+import br.com.ajudafio.presentation.book.list.BookListState
+import br.com.ajudafio.presentation.book.list.books
 
 @Composable
 @Preview
 fun App() {
     AppTheme {
-        BookListScreen(viewModel = remember {
-            BookListViewModel(
-
+        val state = remember {
+            BookListState(
+                searchResults = books,
+                favoriteBooks = books,
             )
-        }, onBookClick = {})
+        }
+        BookListScreen(
+            state = state,
+            onAction = {},
+        )
     }
 }
