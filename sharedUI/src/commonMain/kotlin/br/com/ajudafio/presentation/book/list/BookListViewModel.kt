@@ -10,7 +10,11 @@ class BookListViewModel(
 //    private val searchBooks: SearchBooksUseCase,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(BookListState())
+    private val _state = MutableStateFlow(
+        BookListState(
+            searchResults = books,
+        )
+    )
     val state: StateFlow<BookListState> = _state.asStateFlow()
 
     fun onAction(action: BookListAction) {

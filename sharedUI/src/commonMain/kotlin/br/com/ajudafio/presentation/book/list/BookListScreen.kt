@@ -25,11 +25,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -95,6 +96,18 @@ private fun BookListContent(
         searchResultsLazyState.animateScrollToItem(0)
     }
 
+    LaunchedEffect(state.favoriteBooks){
+        favoriteBooksListState.animateScrollToItem(0)
+    }
+
+    LaunchedEffect(state.selectedTabIndex) {
+        pagerState.animateScrollToPage(state.selectedTabIndex)
+    }
+
+    LaunchedEffect(pagerState.currentPage) {
+        onAction(BookListAction.onTabSelected(pagerState.currentPage))
+    }
+
     Column(
         modifier = Modifier.fillMaxSize().background(AppPallet.PrimaryColorLight)
             .statusBarsPadding(),
@@ -126,24 +139,17 @@ private fun BookListContent(
                 modifier = Modifier.fillMaxSize().navigationBarsPadding(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                PrimaryTabRow(
+                TabRow(
                     selectedTabIndex = state.selectedTabIndex,
-
-                    containerColor = AppPallet.BackgroundColor,
-
-                    contentColor = AppPallet.TextColor,
                     modifier = Modifier
+                        .padding(vertical = 12.dp)
                         .widthIn(max = 700.dp)
-                        .fillMaxWidth().navigationBarsPadding(),
-
-                    indicator = {
+                        .fillMaxWidth(),
+                    containerColor = AppPallet.BackgroundColor,
+                    indicator = { tabPositions ->
                         TabRowDefaults.SecondaryIndicator(
                             color = AppPallet.SecondaryColorDark,
-                            height = 3.dp,
-                            modifier = Modifier.tabIndicatorOffset(
-                                selectedTabIndex = state.selectedTabIndex,
-                                matchContentSize = false
-                            ).fillMaxWidth()
+                            modifier = Modifier.tabIndicatorOffset(tabPositions[state.selectedTabIndex])
                         )
                     }
                 ) {
@@ -152,8 +158,9 @@ private fun BookListContent(
                         onClick = {
                             onAction(BookListAction.onTabSelected(0))
                         },
-                        selectedContentColor = AppPallet.TextColor,
-                        unselectedContentColor = AppPallet.TextColor.copy(alpha = 0.66f)
+                        modifier = Modifier.weight(1f),
+                        selectedContentColor = AppPallet.SecondaryColorDark,
+                        unselectedContentColor = AppPallet.TextColor.copy(alpha = 0.5f)
                     ) {
                         Text(
                             text = stringResource(Res.string.search_results),
@@ -165,8 +172,9 @@ private fun BookListContent(
                         onClick = {
                             onAction(BookListAction.onTabSelected(1))
                         },
-                        selectedContentColor = AppPallet.TextColor,
-                        unselectedContentColor = AppPallet.TextColor.copy(alpha = 0.66f)
+                        modifier = Modifier.weight(1f),
+                        selectedContentColor = AppPallet.SecondaryColorDark,
+                        unselectedContentColor = AppPallet.TextColor.copy(alpha = 0.5f)
                     ) {
                         Text(
                             text = stringResource(Res.string.favorites),
@@ -221,7 +229,7 @@ private fun BookListContent(
                             }
 
                             1 -> {
-                                if(state.searchResults.isEmpty()) {
+                                if(state.favoriteBooks.isEmpty()) {
                                     Text(
                                         text = stringResource(Res.string.no_favorite_books),
                                         textAlign = TextAlign.Center,

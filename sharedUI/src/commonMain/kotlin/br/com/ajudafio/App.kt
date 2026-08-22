@@ -1,26 +1,23 @@
 package br.com.ajudafio
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import br.com.ajudafio.core.theme.AppTheme
+import br.com.ajudafio.di.sharedModules
+import br.com.ajudafio.presentation.book.di.bookUiModule
 import br.com.ajudafio.presentation.book.list.BookListScreen
-import br.com.ajudafio.presentation.book.list.BookListState
-import br.com.ajudafio.presentation.book.list.books
+import org.koin.compose.KoinApplication
 
 @Composable
 @Preview
 fun App() {
-    AppTheme {
-        val state = remember {
-            BookListState(
-                searchResults = books,
-                favoriteBooks = books,
+    KoinApplication(application = {
+        modules(sharedModules + bookUiModule)
+    }) {
+        AppTheme {
+            BookListScreen(
+                onBookClick = {},
             )
         }
-        BookListScreen(
-            state = state,
-            onAction = {},
-        )
     }
 }
