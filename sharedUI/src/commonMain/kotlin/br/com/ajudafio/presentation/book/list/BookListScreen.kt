@@ -254,33 +254,3 @@ private fun BookListContent(
     }
 }
 
-
-@Composable
-private fun BookListItem(
-    book: Book,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = book.title,
-                style = MaterialTheme.typography.titleMedium,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
-            if (book.authors.isNotEmpty()) {
-                Text(
-                    text = book.authors.joinToString(),
-                    style = MaterialTheme.typography.bodySmall,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-        }
-    }
-}

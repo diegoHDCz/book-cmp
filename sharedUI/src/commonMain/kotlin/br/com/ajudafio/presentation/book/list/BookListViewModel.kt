@@ -48,7 +48,7 @@ class BookListViewModel(
 
     fun onAction(action: BookListAction) {
         when (action) {
-            is BookListAction.OnBookClick -> Unit // navegação é responsabilidade do host
+            is BookListAction.OnBookClick -> Unit
 
             is BookListAction.OnSearchQueryChange -> {
                 _state.update {
