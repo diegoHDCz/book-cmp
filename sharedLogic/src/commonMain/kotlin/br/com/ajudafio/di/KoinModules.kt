@@ -1,6 +1,6 @@
 package br.com.ajudafio.di
 
-import br.com.ajudafio.feature.book.di.bookModule
+import br.com.ajudafio.book.di.bookModule
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.dsl.KoinAppDeclaration

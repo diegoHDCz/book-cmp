@@ -1,6 +1,6 @@
 package br.com.ajudafio.presentation.book.detail
 
-import br.com.ajudafio.feature.book.domain.model.Book
+import br.com.ajudafio.book.domain.model.Book
 import br.com.ajudafio.presentation.UiText
 
 data class BookDetailState(

@@ -16,7 +16,7 @@ struct ContentView: View {
                     Image(systemName: "swift")
                         .font(.system(size: 200))
                         .foregroundColor(.accentColor)
-                    Text("SwiftUI: \(AppContainer.shared.getGreetingUseCase.invoke().message)")
+                    // TODO: plugar a feature de livros aqui (via Koin) quando a UI iOS for definida.
                 }
                 .transition(.move(edge: .top).combined(with: .opacity))
             }

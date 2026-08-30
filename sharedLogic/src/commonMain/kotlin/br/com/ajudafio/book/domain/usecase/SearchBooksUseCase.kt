@@ -1,9 +1,9 @@
-package br.com.ajudafio.feature.book.domain.usecase
+package br.com.ajudafio.book.domain.usecase
 
+import br.com.ajudafio.book.domain.model.Book
+import br.com.ajudafio.book.domain.repository.BookRepository
 import br.com.ajudafio.core.domain.DataError
 import br.com.ajudafio.core.domain.Result
-import br.com.ajudafio.feature.book.domain.model.Book
-import br.com.ajudafio.feature.book.domain.repository.BookRepository
 
 class SearchBooksUseCase(
     private val repository: BookRepository,

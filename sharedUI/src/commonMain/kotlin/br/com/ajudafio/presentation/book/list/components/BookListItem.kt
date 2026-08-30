@@ -38,7 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import br.com.ajudafio.core.theme.AppPallet
-import br.com.ajudafio.feature.book.domain.model.Book
+import br.com.ajudafio.book.domain.model.Book
 import coil3.compose.rememberAsyncImagePainter
 import org.jetbrains.compose.resources.painterResource
 import kotlin.math.round

@@ -1,6 +1,6 @@
 package br.com.ajudafio.presentation.book.list
 
-import br.com.ajudafio.feature.book.domain.model.Book
+import br.com.ajudafio.book.domain.model.Book
 
 sealed interface BookListAction {
     data class OnSearchQueryChange(val query: String): BookListAction

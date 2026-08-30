@@ -11,7 +11,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import br.com.ajudafio.feature.book.domain.model.Book
+import br.com.ajudafio.book.domain.model.Book
 
 @Composable
 fun BookList(

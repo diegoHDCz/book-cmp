@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.ajudafio.core.domain.onError
 import br.com.ajudafio.core.domain.onSuccess
-import br.com.ajudafio.feature.book.domain.usecase.GetBookDetailsUseCase
+import br.com.ajudafio.book.domain.usecase.GetBookDetailsUseCase
 import br.com.ajudafio.presentation.book.toUiText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

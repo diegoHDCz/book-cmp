@@ -1,4 +1,4 @@
-package br.com.ajudafio.feature.book.domain.model
+package br.com.ajudafio.book.domain.model
 
 
 data class Book(
