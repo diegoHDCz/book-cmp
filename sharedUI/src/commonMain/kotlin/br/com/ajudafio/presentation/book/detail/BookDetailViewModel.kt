@@ -2,9 +2,9 @@ package br.com.ajudafio.presentation.book.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.ajudafio.book.domain.repository.BookRepository
 import br.com.ajudafio.core.domain.onError
 import br.com.ajudafio.core.domain.onSuccess
-import br.com.ajudafio.book.domain.usecase.GetBookDetailsUseCase
 import br.com.ajudafio.presentation.book.toUiText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class BookDetailViewModel(
     private val bookId: String,
-    private val getBookDetails: GetBookDetailsUseCase,
+    private val bookRepository: BookRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(BookDetailState())
@@ -34,7 +34,7 @@ class BookDetailViewModel(
     private fun load() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, errorMessage = null) }
-            getBookDetails(bookId)
+            bookRepository.getBookById(bookId)
                 .onSuccess { book ->
                     _state.update { it.copy(isLoading = false, book = book) }
                 }

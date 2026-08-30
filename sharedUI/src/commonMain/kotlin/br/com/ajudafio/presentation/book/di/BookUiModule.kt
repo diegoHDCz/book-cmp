@@ -13,5 +13,5 @@ import org.koin.dsl.module
 val bookUiModule = module {
     viewModelOf(::BookListViewModel)
     // bookId chega em runtime via parametersOf(...) na tela de detalhe.
-    viewModel { (bookId: String) -> BookDetailViewModel(bookId = bookId, getBookDetails = get()) }
+    viewModel { (bookId: String) -> BookDetailViewModel(bookId = bookId, bookRepository = get()) }
 }

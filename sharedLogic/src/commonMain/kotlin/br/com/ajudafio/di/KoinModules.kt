@@ -1,6 +1,7 @@
 package br.com.ajudafio.di
 
 import br.com.ajudafio.book.di.bookModule
+import br.com.ajudafio.book.di.platformModule
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.dsl.KoinAppDeclaration
@@ -10,6 +11,7 @@ import org.koin.dsl.KoinAppDeclaration
  */
 val sharedModules = listOf(
     bookModule,
+    platformModule
 )
 
 /**
