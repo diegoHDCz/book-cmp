@@ -1,46 +1,19 @@
 package br.com.ajudafio.presentation.book.detail
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import br.com.ajudafio.book.domain.model.Book
 import br.com.ajudafio.book.domain.repository.BookRepository
-import br.com.ajudafio.core.domain.onError
-import br.com.ajudafio.core.domain.onSuccess
-import br.com.ajudafio.presentation.book.toUiText
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class BookDetailViewModel(
-    private val bookId: String,
     private val bookRepository: BookRepository,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(BookDetailState())
-    val state: StateFlow<BookDetailState> = _state.asStateFlow()
+    private val _selectedBookDetail = MutableStateFlow<Book?>(null)
+    val selectedBookDetail = _selectedBookDetail.asStateFlow()
 
-    init {
-        load()
-    }
-
-    fun onAction(action: BookDetailAction) {
-        when (action) {
-            BookDetailAction.OnRetry -> load()
-            BookDetailAction.OnBackClick -> Unit // navegação é responsabilidade do host
-        }
-    }
-
-    private fun load() {
-        viewModelScope.launch {
-            _state.update { it.copy(isLoading = true, errorMessage = null) }
-            bookRepository.getBookById(bookId)
-                .onSuccess { book ->
-                    _state.update { it.copy(isLoading = false, book = book) }
-                }
-                .onError { error ->
-                    _state.update { it.copy(isLoading = false, errorMessage = error.toUiText()) }
-                }
-        }
+    fun onSelectBook(book: Book?) {
+        _selectedBookDetail.value = book
     }
 }

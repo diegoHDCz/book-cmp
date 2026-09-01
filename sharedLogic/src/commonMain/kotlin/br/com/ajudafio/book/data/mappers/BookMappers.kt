@@ -5,7 +5,7 @@ import br.com.ajudafio.book.domain.model.Book
 
 fun SearchedBookDto.toBook(): Book {
     return Book(
-        id = id,
+        id = id.substringAfterLast("/"),
         title = title,
         authors = authorNames.orEmpty(),
         description = null,
