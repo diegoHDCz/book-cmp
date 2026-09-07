@@ -60,6 +60,7 @@ kotlin {
             implementation(libs.koin.composeViewmodel)
             implementation(libs.compose.material.icons.core)
             implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor3)
             implementation(libs.navigation.compose)
         }
         commonTest.dependencies {
