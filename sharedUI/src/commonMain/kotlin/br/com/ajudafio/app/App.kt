@@ -1,4 +1,4 @@
-package br.com.ajudafio
+package br.com.ajudafio.app
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,15 +12,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import br.com.ajudafio.app.Route
 import br.com.ajudafio.core.theme.AppTheme
 import br.com.ajudafio.di.sharedModules
+import br.com.ajudafio.presentation.book.SelectedBookViewModel
+import br.com.ajudafio.presentation.book.detail.BookDetailAction
+import br.com.ajudafio.presentation.book.detail.BookDetailScreenRoot
 import br.com.ajudafio.presentation.book.detail.BookDetailViewModel
 import br.com.ajudafio.presentation.book.di.bookUiModule
 import br.com.ajudafio.presentation.book.list.BookListScreen
@@ -47,7 +50,7 @@ fun App() {
                     composable<Route.BookList> {
                         val viewModel = koinViewModel<BookListViewModel>()
                         val selectedBookViewModel =
-                            it.sharedKoinViewModel<BookDetailViewModel>(navController)
+                            it.sharedKoinViewModel<SelectedBookViewModel>(navController)
 
                         LaunchedEffect(true) {
                             selectedBookViewModel.onSelectBook(null)
@@ -63,14 +66,22 @@ fun App() {
                     }
                     composable<Route.BookDetail> {
                         val selectedBookViewModel =
-                            it.sharedKoinViewModel<BookDetailViewModel>(navController)
+                            it.sharedKoinViewModel<SelectedBookViewModel>(navController)
+                        val viewModel = koinViewModel<BookDetailViewModel>()
                         val selectedBook by selectedBookViewModel.selectedBookDetail.collectAsStateWithLifecycle()
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text("Book detail screen! the ID is $selectedBook")
+
+                        LaunchedEffect(selectedBook) {
+                            selectedBook?.let {
+                                viewModel.onAction(BookDetailAction.OnSelectedBookChange(it))
+                            }
                         }
+
+                        BookDetailScreenRoot(
+                            viewModel = viewModel,
+                            onBackClick = {
+                                navController.navigateUp()
+                            }
+                        )
                     }
 
                 }

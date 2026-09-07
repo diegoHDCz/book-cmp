@@ -1,8 +1,8 @@
 package br.com.ajudafio.presentation.book.di
 
+import br.com.ajudafio.presentation.book.SelectedBookViewModel
 import br.com.ajudafio.presentation.book.detail.BookDetailViewModel
 import br.com.ajudafio.presentation.book.list.BookListViewModel
-import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -13,5 +13,6 @@ import org.koin.dsl.module
 val bookUiModule = module {
     viewModelOf(::BookListViewModel)
     viewModelOf(::BookDetailViewModel)
+    viewModelOf(::SelectedBookViewModel)
 
 }

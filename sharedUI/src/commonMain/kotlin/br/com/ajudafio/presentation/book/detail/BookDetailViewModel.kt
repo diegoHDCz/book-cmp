@@ -1,19 +1,25 @@
 package br.com.ajudafio.presentation.book.detail
 
 import androidx.lifecycle.ViewModel
-import br.com.ajudafio.book.domain.model.Book
-import br.com.ajudafio.book.domain.repository.BookRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
-class BookDetailViewModel(
-    private val bookRepository: BookRepository,
-) : ViewModel() {
+class BookDetailViewModel : ViewModel() {
 
-    private val _selectedBookDetail = MutableStateFlow<Book?>(null)
-    val selectedBookDetail = _selectedBookDetail.asStateFlow()
+    private val _state = MutableStateFlow(BookDetailState())
+    val state = _state.asStateFlow()
 
-    fun onSelectBook(book: Book?) {
-        _selectedBookDetail.value = book
+    fun onAction(action: BookDetailAction) {
+        when (action) {
+            is BookDetailAction.OnSelectedBookChange -> {
+                _state.update { it.copy(book = action.book) }
+            }
+            is BookDetailAction.OnFavoriteClick -> {
+
+            }
+            else -> Unit
+        }
     }
+
 }

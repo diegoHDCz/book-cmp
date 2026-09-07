@@ -7,4 +7,5 @@ data class BookDetailState(
     val isLoading: Boolean = false,
     val book: Book? = null,
     val errorMessage: UiText? = null,
+    val isFavorite: Boolean = false
 )
