@@ -25,7 +25,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -57,7 +56,7 @@ fun BlurredImageBackground(
     onFavoriteClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    content: @Composable (isCoverImageLoading: Boolean) -> Unit
 ) {
     var imageLoadResult by remember {
         mutableStateOf<Result<Painter>?>(null)
@@ -72,6 +71,9 @@ fun BlurredImageBackground(
             } else {
                 Result.failure(Exception("Invalid image dimensions"))
             }
+        },
+        onError = {
+            imageLoadResult = Result.failure(it.result.throwable)
         }
     )
     Box (modifier = modifier){
@@ -99,9 +101,7 @@ fun BlurredImageBackground(
                     .weight(0.7f)
                     .fillMaxSize()
                     .background(BackgroundColor)
-            ) {
-                content()
-            }
+            )
         }
         IconButton(
             onClick = onBackClick,
@@ -136,7 +136,7 @@ fun BlurredImageBackground(
                     targetState = imageLoadResult
                 ) { result ->
                     when (result) {
-                        null -> CircularProgressIndicator()
+                        null -> Box(modifier = Modifier.fillMaxSize())
                         else -> {
                             Box {
                                 Image(
@@ -187,7 +187,9 @@ fun BlurredImageBackground(
                 }
 
             }
-            content()
+            Box(modifier = Modifier.weight(1f)) {
+                content(imageLoadResult == null)
+            }
         }
     }
 }
