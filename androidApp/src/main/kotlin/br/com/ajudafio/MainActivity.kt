@@ -8,7 +8,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import android.content.Context
 import br.com.ajudafio.app.App
+import org.koin.dsl.module
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,8 +26,12 @@ class MainActivity : ComponentActivity() {
         )
         super.onCreate(savedInstanceState)
 
+        val contextModule = module {
+            single<Context> { applicationContext }
+        }
+
         setContent {
-            App()
+            App(extraModules = listOf(contextModule))
         }
     }
 }

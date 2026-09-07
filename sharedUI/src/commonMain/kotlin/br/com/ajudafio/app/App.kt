@@ -1,18 +1,12 @@
 package br.com.ajudafio.app
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -30,13 +24,14 @@ import br.com.ajudafio.presentation.book.list.BookListScreen
 import br.com.ajudafio.presentation.book.list.BookListViewModel
 import org.koin.compose.KoinApplication
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.module.Module
 
 @Composable
 @Preview
-fun App() {
+fun App(extraModules: List<Module> = emptyList()) {
 
     KoinApplication(application = {
-        modules(sharedModules + bookUiModule)
+        modules(sharedModules + bookUiModule + extraModules)
     }) {
         AppTheme {
             val navController = rememberNavController()
