@@ -1,7 +1,24 @@
 package br.com.ajudafio.book.data.mappers
 
+import br.com.ajudafio.book.data.dto.BookWorkDto
 import br.com.ajudafio.book.data.dto.SearchedBookDto
 import br.com.ajudafio.book.domain.model.Book
+
+fun BookWorkDto.toBook(id: String): Book {
+    return Book(
+        id = id,
+        title = "",
+        authors = emptyList(),
+        description = description,
+        coverUrl = null,
+        languages = emptyList(),
+        firstPublishYear = null,
+        averageRating = null,
+        ratingCount = null,
+        numPages = null,
+        numEditions = 0
+    )
+}
 
 fun SearchedBookDto.toBook(): Book {
     return Book(

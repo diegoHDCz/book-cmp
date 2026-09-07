@@ -19,6 +19,6 @@ class DefaultBookRepository(
     }
 
     override suspend fun getBookById(id: String): Result<Book, DataError.Remote> {
-        return remoteBookDataSource.getBookById(id).map { it.toBook() }
+        return remoteBookDataSource.getBookDetails(id).map { it.toBook(id) }
     }
 }

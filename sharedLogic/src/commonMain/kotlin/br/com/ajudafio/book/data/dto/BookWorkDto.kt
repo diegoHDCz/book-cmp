@@ -2,7 +2,7 @@ package br.com.ajudafio.book.data.dto
 
 import kotlinx.serialization.Serializable
 
-@Serializable()
+@Serializable(with = BookWorkDtoSerializer::class)
 data class BookWorkDto(
     val description: String? = null
 ) {

@@ -1,5 +1,6 @@
 package br.com.ajudafio.book.data.network
 
+import br.com.ajudafio.book.data.dto.BookWorkDto
 import br.com.ajudafio.core.domain.DataError
 import br.com.ajudafio.core.domain.Result
 import br.com.ajudafio.book.data.dto.SearchResponseDto
@@ -11,5 +12,5 @@ interface RemoteBookDataSource {
         resultLimit: Int? = null,
     ): Result<SearchResponseDto, DataError.Remote>
 
-    suspend fun getBookById(id: String): Result<SearchedBookDto, DataError.Remote>
+    suspend fun getBookDetails(id: String): Result<BookWorkDto, DataError.Remote>
 }
